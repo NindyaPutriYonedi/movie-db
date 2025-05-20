@@ -24,9 +24,11 @@ Route::get('/', function () {
 // Route::get('/home', function () {
 //     return view('layouts.home');
 
-Route::resource('movie', MovieController::class);
+// Route::resource('movie', MovieController::class);
 
 Route::resource('categories', CategoryController::class);
 
 Route::get('/home', [MovieController::class, 'homepage']);
+
+Route::get('detailmovie/{id}/{slug}', [MovieController::class, 'detail']);
 

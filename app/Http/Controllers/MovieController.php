@@ -10,11 +10,17 @@ class MovieController extends Controller
 {
     public function index()
     {
-        $movies = Movie::latest()->paginate(25);
+        $movies = Movie::latest()->paginate(4);
 
         return view('movie.index', ['movies' => $movies]);
          //compact('movies') untuk menyingkat array  ['movies' => $movies]
         // $movies = Movie::with('category')->latest()->paginate(25);
+    }
+
+    public function detail($id, $slug){
+        $movie = Movie::find($id);
+    
+        return view('layouts.detailmovie', compact('movie'));
     }
 
     public function homepage()
