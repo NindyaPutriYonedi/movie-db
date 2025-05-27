@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
+
 
 class MovieController extends Controller
 {
@@ -19,7 +22,7 @@ class MovieController extends Controller
 
     public function detail($id, $slug){
         $movie = Movie::find($id);
-    
+
         return view('layouts.detailmovie', compact('movie'));
     }
 
@@ -34,24 +37,35 @@ class MovieController extends Controller
 
     public function create()
     {
-        return view('movie.create');
+        $categories = Category::all();
+    return view('movie.create', compact('categories'));
+        // return view('movie.create');
     }
 
     public function store(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:movies,slug',
-            'synopsis' => 'nullable|string',
-            'year' => 'required|integer|min:1800|max:' . (date('Y') + 1),
-            'actors' => 'required|string|max:255',
-            'category_id' => 'required|integer',  // validasi category_id bigint sebagai integer
-        ]);
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'synopsis' => 'nullable|string',
+        'year' => 'required|integer|min:1950|max:' . (date('Y') + 1),
+        'actors' => 'required|string|max:255',
+        'category_id' => 'required|integer',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        Movie::create($validated);
+    // Generate slug otomatis dari title
+    $validated['slug'] = Str::slug($validated['title']);
 
-        return redirect('/movie')->with('success', 'Data Movie berhasil ditambahkan!');
+    // Simpan gambar jika ada
+    if ($request->hasFile('cover_image')) {
+        $validated['cover_image'] = $request->file('cover_image')->store('cover_images', 'public');
     }
+
+    Movie::create($validated);
+
+    return redirect('/movie')->with('success', 'Data Movie berhasil ditambahkan!');
+}
+
 
     public function show(Movie $movie)
     {
@@ -83,5 +97,11 @@ class MovieController extends Controller
     {
         $movie->delete();
         return redirect('/movie')->with('success', 'Data Movie berhasil dihapus!');
+    }
+
+    public function createMovie()
+    {
+        $categories = Category::all();
+        return view('create-movie', compact('categories'));
     }
 }

@@ -17,6 +17,9 @@
               <li class="nav-item">
                 <a class="nav-link @yield('navKategori') " aria-current="page" href="{{url('/categories')}}">Kategori</a>
               </li>
+              {{-- <li class="nav-item">
+                <a class="nav-link @yield('navMovies') " aria-current="page" href="{{route('createMovies')}}">Movie2</a>
+              </li> --}}
           </ul>
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

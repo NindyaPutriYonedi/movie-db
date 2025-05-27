@@ -4,7 +4,14 @@
 
 @section('content')
 
-<h1 class="mt-5">Sticky footer with fixed navbar</h1>
+<h1 class="mt-5">Latest Movie</h1>
+@if (session('success'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="row">
     @foreach ($movies as $movie)
 
@@ -12,7 +19,7 @@
         <div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="{{ $movie->cover_image }}" class="img-fluid rounded-start" alt="...">
+      <img src="{{ asset('storage/' . $movie->cover_image) }}" class="img-fluid rounded-start" style="height: 100%; object-fit: cover;">
     </div>
     <div class="col-md-8">
       <div class="card-body">
