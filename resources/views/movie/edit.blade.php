@@ -4,7 +4,6 @@
 
 <h1>Edit Data Movie</h1>
 
-{{-- Tampilkan pesan error jika ada --}}
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -15,10 +14,11 @@
     </div>
 @endif
 
-<form action="{{ route('movie.update', $movie->id) }}" method="POST">
+<form action="{{ route('movie.update', $movie->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
+    {{-- Title --}}
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -31,6 +31,7 @@
         @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
+    {{-- Slug --}}
     <div class="mb-3">
         <label for="slug" class="form-label">Slug</label>
         <input
@@ -43,6 +44,7 @@
         @error('slug') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
+    {{-- Synopsis --}}
     <div class="mb-3">
         <label for="synopsis" class="form-label">Synopsis</label>
         <textarea
@@ -54,18 +56,25 @@
         @error('synopsis') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
-     <div class="mb-3">
-        <label for="category_id" class="form-label">ID Kategori</label>
-        <input
-            type="text"
+    {{-- Category ID (Dropdown) --}}
+    <div class="mb-3">
+        <label for="category_id" class="form-label">Kategori</label>
+        <select
             name="category_id"
-            class="form-control @error('category_id') is-invalid @enderror"
             id="category_id"
-            value="{{ old('category_id', $movie->category_id) }}"
+            class="form-select @error('category_id') is-invalid @enderror"
             required>
+            <option value="">-- Pilih Kategori --</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ old('category_id', $movie->category_id) == $category->id ? 'selected' : '' }}>
+                    {{ $category->category_name }}
+                </option>
+            @endforeach
+        </select>
         @error('category_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
+    {{-- Year --}}
     <div class="mb-3">
         <label for="year" class="form-label">Tahun</label>
         <input
@@ -78,6 +87,7 @@
         @error('year') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
+    {{-- Actors --}}
     <div class="mb-3">
         <label for="actors" class="form-label">Aktor</label>
         <input
@@ -88,6 +98,22 @@
             value="{{ old('actors', $movie->actors) }}"
             required>
         @error('actors') <div class="invalid-feedback">{{ $message }}</div> @enderror
+    </div>
+
+    {{-- Cover Image --}}
+    <div class="mb-3">
+        <label for="cover_image" class="form-label">Cover Image</label>
+        <input
+            type="file"
+            name="cover_image"
+            class="form-control @error('cover_image') is-invalid @enderror"
+            id="cover_image">
+        @error('cover_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+
+        {{-- Optional: Tampilkan preview image lama --}}
+        @if ($movie->cover_image)
+            <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="Cover Image" class="mt-2" style="max-height: 150px;">
+        @endif
     </div>
 
     <button type="submit" class="btn btn-success">Update</button>

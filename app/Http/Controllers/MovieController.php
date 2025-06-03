@@ -74,7 +74,8 @@ class MovieController extends Controller
 
     public function edit(Movie $movie)
     {
-        return view('movie.edit', compact('movie'));
+         $categories = Category::all();
+        return view('movie.edit', compact('movie','categories'));
     }
 
     public function update(Request $request, Movie $movie): RedirectResponse
