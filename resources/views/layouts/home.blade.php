@@ -4,9 +4,9 @@
 
 @section('content')
 
-<h1 class="mt-5">Latest Movie</h1>
+<h1 class="mt-4">Latest Movie</h1>
 @if (session('success'))
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -18,10 +18,10 @@
     <div class="col-lg-6">
         <div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <img src="{{ asset('storage/' . $movie->cover_image) }}" class="img-fluid rounded-start" style="height: 100%; object-fit: cover;">
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="card-body">
         <h5 class="card-title">{{ $movie->title}}</h5>
         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
