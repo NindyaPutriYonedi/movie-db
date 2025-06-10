@@ -60,9 +60,11 @@
                             <form action="{{ route('movie.destroy', $movie->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                 @csrf
                                 @method('DELETE')
+                                @can('delete')
                                 <button class="btn btn-danger btn-sm" title="Hapus">
                                     <i class="bi bi-trash"></i>
                                 </button>
+                                @endcan
                             </form>
                         </td>
                     </tr>

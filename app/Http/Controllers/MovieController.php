@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Models\Movie;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\RedirectResponse;
 
 
 class MovieController extends Controller
@@ -97,6 +98,13 @@ class MovieController extends Controller
     public function destroy(Movie $movie): RedirectResponse
     {
         $movie->delete();
+         if (Gate::allows('delete'))
+        {
+            echo "Delete movie $movie";
+        }
+        else{
+            abort(403);
+        }
         return redirect('/movie')->with('success', 'Data Movie berhasil dihapus!');
     }
 
@@ -104,5 +112,16 @@ class MovieController extends Controller
     {
         $categories = Category::all();
         return view('create-movie', compact('categories'));
+    }
+
+    public function delete($id)
+    {
+        // if (Gate::allows('delete'))
+        // {
+        //     echo "Delete movie $id";
+        // }
+        // else{
+        //     abort(403);
+        // }
     }
 }
